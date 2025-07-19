@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>智能头盔物联网监控平台</title>
+  <!-- 引入Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 引入Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <!-- 引入Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  <!-- 引入高德地图API (请替换为您的有效Key) -->
+  <script src="https://webapi.amap.com/maps?v=2.0&key=5e7e8e8afe98c4c209502d118a7f6625"></script>
+  
+  
+  <!-- Tailwind配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#165DFF',
+            secondary: '#0FC6C2',
+            warning: '#FF7D00',
+            danger: '#F53F3F',
+            success: '#00B42A',
+            dark: '#1D2129',
+            'gray-light': '#F2F3F5',
+            'gray-medium': '#C9CDD4'
+          },
+          fontFamily: {
+            inter: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .card-shadow {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      }
+      .card-hover {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+      }
+      .animate-pulse-slow {
+        animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+    }
+  </style>
+</head>
+<body class="font-inter bg-gray-light min-h-screen">
+  <!-- 顶部导航栏 -->
+<header class="bg-white shadow-md fixed w-full top-0 z-50">
+  <div class="container mx-auto px-5 py-3 flex items-center justify-between"> <!-- 适中内边距 -->
+    <!-- 左侧：平台名称和图标 -->
+    <div class="flex items-center space-x-3"> <!-- 增加图标和文字间距 -->
+      <i class="fa fa-bicycle text-primary text-2xl"></i> <!-- 适中图标大小 -->
+      <h1 class="text-xl font-bold text-dark"> <!-- 适中文字大小 -->
+        智能头盔<span class="text-primary">物联网</span>平台
+      </h1>
+    </div>
+    
+    <!-- 右侧：火山引擎支持 + Logo -->
+    <div class="flex items-center space-x-3">
+      <h3><span class="text-gray-600 text-sm md:text-base">火山引擎支持</span> <!-- 响应式文字大小 --></h3>
+      <img 
+        src="https://ts1.tc.mm.bing.net/th/id/R-C.cddc9706e4d1fed4799f067ed9b14a6e?rik=T5HBzetvHEsQ0w&riu=http%3a%2f%2fn.sinaimg.cn%2fsinakd20230418s%2f715%2fw758h757%2f20230418%2f3b95-21f6738482c51496364487db9570c407.jpg&ehk=BdxXWmq74srjNirLCtobpP82gh%2frYZt76w7E3U1j24o%3d&risl=&pid=ImgRaw&r=0" height="30px" width="30px" 
+        alt="火山引擎 Logo" 
+        class="h-7 w-auto" 
+      >
+    </div>
+    
+    <!-- 移动端菜单按钮 -->
+    <button class="md:hidden text-dark text-xl">
+      <i class="fa fa-bars"></i>
+    </button>
+  </div>
+</header>
+
+  <!-- 主内容区 -->
+  <main class="container mx-auto px-4 pt-24 pb-12">
+    <!-- 欢迎信息 -->
+    <div class="mb-8 flex items-center justify-between"> <!-- 关键：flex 布局 -->
+  <div>
+    <h2 class="text-[clamp(2.5rem,3vw,3.0rem)] font-bold text-dark">欢迎回来，<span class="text-primary">骑行者</span></h2>
+    <p class="text-gray-600">今天是 <span id="current-date">2025年7月13日</span>，上次骑行：昨天 18:30</p>
+  </div>
+  
+  <!-- 右侧按钮 -->
+  <button class="px-5 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition" onclick="alert('骑行开始')">
+    <h2>开始骑行</h2>
+  </button>
+</div>
+    
+    <!-- 数据概览卡片 -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div class="bg-white rounded-xl p-6 card-shadow card-hover">
+        <div class="flex items-center justify-between mb-4">
+          <b><h2 class="text-gray-600 font-medium">今日骑行</h2></b>
+          <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+            <i class="fa fa-tachometer text-primary"></i>
+          </div>
+        </div>
+        <div class="flex items-end justify-between">
+          <div>
+            <p class="text-3xl font-bold text-dark">18.5<span class="text-sm text-gray-500 ml-1">公里</span></p>
+            <p class="text-success text-sm mt-1"><i class="fa fa-arrow-up"></i> 比昨日增加 2.3公里</p>
+          </div>
+          <div class="h-16 w-16">
+            <canvas id="today-ride-chart"></canvas>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-xl p-6 card-shadow card-hover">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-gray-600 font-medium">平均速度</h3>
+          <div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center">
+            <i class="fa fa-road text-secondary"></i>
+          </div>
+        </div>
+        <div class="flex items-end justify-between">
+          <div>
+            <p class="text-3xl font-bold text-dark">22.8<span class="text-sm text-gray-500 ml-1">公里/小时</span></p>
+            <p class="text-danger text-sm mt-1"><i class="fa fa-arrow-down"></i> 比上周减少 1.2公里/小时</p>
+          </div>
+          <div class="h-16 w-16">
+            <canvas id="speed-chart"></canvas>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-xl p-6 card-shadow card-hover">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-gray-600 font-medium">骑行时间</h3>
+          <div class="w-10 h-10 rounded-full bg-warning/10 flex items-center justify-center">
+            <i class="fas fa-clock text-orange-500"></i>
+          </div>
+        </div>
+        <div class="flex items-end justify-between">
+          <div>
+            <p class="text-3xl font-bold text-dark">1.5<span class="text-sm text-gray-500 ml-1">小时</span></p>
+            <p class="text-success text-sm mt-1"><i class="fa fa-arrow-up"></i> 比昨日增加 0.5小时</p>
+          </div>
+          <div class="h-16 w-16">
+            <canvas id="time-chart"></canvas>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-xl p-6 card-shadow card-hover">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-gray-600 font-medium">卡路里</h3>
+          <div class="w-10 h-10 rounded-full bg-danger/10 flex items-center justify-center">
+            <i class="fa fa-fire text-danger"></i>
+          </div>
+        </div>
+        <div class="flex items-end justify-between">
+          <div>
+            <p class="text-3xl font-bold text-dark">682<span class="text-sm text-gray-500 ml-1">千卡</span></p>
+            <p class="text-success text-sm mt-1"><i class="fa fa-arrow-up"></i> 比昨日增加 125千卡</p>
+          </div>
+          <div class="h-16 w-16">
+            <canvas id="calories-chart"></canvas>
+          </div>
+        </div>
+      </div>
+      
+
+      
+    </div>
+    
+    <!-- 健康监测卡片 -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      
+      
+      <div class="bg-white rounded-xl p-6 card-shadow card-hover">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-gray-600 font-medium">头盔状态</h3>
+          <div class="flex items-center space-x-2">
+            <span class="inline-block w-2 h-2 rounded-full bg-success animate-pulse"></span>
+            <span class="text-success text-sm">已连接</span>
+          </div>
+        </div>
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <p class="text-2xl font-bold text-dark">85<span class="text-sm text-gray-500 ml-1">%</span></p>
+            <p class="text-gray-500 text-sm">电池电量</p>
+          </div>
+          <div class="w-32 h-32">
+            <canvas id="battery-chart"></canvas>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mt-4">
+          <div class="flex items-center">
+            <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+              <i class="fa fa-signal text-primary"></i>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">信号强度</p>
+              <p class="font-bold text-dark">良好</p>
+            </div>
+          </div>
+        
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-xl p-6 card-shadow card-hover">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-gray-600 font-medium">安全警告</h3>
+          <div class="flex items-center space-x-2">
+            <span class="inline-block w-2 h-2 rounded-full bg-gray-medium"></span>
+            <span class="text-gray-500 text-sm">无警告</span>
+          </div>
+        </div>
+        <div class="mb-4">
+          <p class="text-2xl font-bold text-dark">0<span class="text-sm text-gray-500 ml-1">个未处理警告</span></p>
+        </div>
+        <div class="space-y-3">
+          <div class="flex items-center p-3 bg-gray-light rounded-lg">
+            <div class="w-8 h-8 rounded-full bg-warning/10 flex items-center justify-center mr-3">
+              <i class="fa fa-exclamation-triangle text-warning"></i>
+            </div>
+            <div class="flex-1">
+              <p class="font-medium">头盔未正确佩戴</p>
+              <p class="text-sm text-gray-500">7月10日 15:20</p>
+            </div>
+            <span class="px-2 py-1 bg-warning/10 text-warning text-xs rounded-full">已处理</span>
+          </div>
+          
+          <div class="flex items-center p-3 bg-gray-light rounded-lg">
+            <div class="w-8 h-8 rounded-full bg-danger/10 flex items-center justify-center mr-3">
+              <i class="fa fa-exclamation-circle text-danger"></i>
+            </div>
+            <div class="flex-1">
+              <p class="font-medium">异常震动</p>
+              <p class="text-sm text-gray-500">7月8日 09:45</p>
+            </div>
+            <span class="px-2 py-1 bg-danger/10 text-danger text-xs rounded-full">已处理</span>
+          </div>
+          
+          <div class="flex items-center p-3 bg-gray-light rounded-lg">
+            <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+              <i class="fa fa-info-circle text-primary"></i>
+            </div>
+            <div class="flex-1">
+              <p class="font-medium">电池电量低</p>
+              <p class="text-sm text-gray-500">7月5日 18:10</p>
+            </div>
+            <span class="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">已处理</span>
+          </div>
+        </div>
+      </div>
+
+
+        <!-- 紧急联系人卡片 -->
+      <div class="bg-white rounded-xl p-6 card-shadow card-hover">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-gray-600 font-medium">紧急联系人</h3>
+          <div class="flex items-center space-x-2">
+            <span class="inline-block w-2 h-2 rounded-full bg-green-500"></span>
+            <span class="text-green-500 text-sm">已设置</span>
+          </div>
+        </div>
+        <p class="text-2xl font-bold text-dark">1<span class="text-sm text-gray-500 ml-1">个联系人</span></p>
+        <div class="space-y-3 mt-4">
+          <div class="flex items-center p-3 bg-gray-light rounded-lg">
+            <div class="w-8 h-8 rounded-full bg-blue-10 flex items-center justify-center mr-3">
+              <i class="fa fa-user text-blue"></i>
+            </div>
+            <div class="flex-1">
+              <p class="font-medium">紧急联系人</p>
+              <p class="text-sm text-gray-500">138-1234-5678</p>
+            </div>
+            <button class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 
+              hover:bg-blue-600 hover:text-white hover:border-transparent 
+              transition" onclick="alert('求助短信发送成功')">
+              发送求助短信
+            </button>
+          </div>
+          <div class="flex items-center p-3 bg-gray-light rounded-lg">
+            <div class="w-8 h-8 rounded-full bg-green-10 flex items-center justify-center mr-3">
+              <i class="fa fa-user text-green"></i>
+            </div>
+            <div class="flex-1">
+              <p class="font-medium">报警电话</p>
+              <p class="text-sm text-gray-500">110</p>
+            </div>
+            <button class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 
+              hover:bg-blue-600 hover:text-white hover:border-transparent 
+              transition" onclick="alert('已拨打报警电话')">
+               拨打报警电话
+            </button>
+          </div>
+
+          <div class="flex items-center p-3 bg-gray-light rounded-lg">
+            <div class="w-8 h-8 rounded-full bg-green-10 flex items-center justify-center mr-3">
+              <i class="fa fa-user text-green"></i>
+            </div>
+            <div class="flex-1">
+              <p class="font-medium">急救电话</p>
+              <p class="text-sm text-gray-500">120</p>
+            </div>
+            <button class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 
+              hover:bg-blue-600 hover:text-white hover:border-transparent 
+              transition" onclick="alert('已拨打急救电话')">
+               拨打急救电话
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+
+    
+
+    
+    
+    <!-- 地图与历史骑行 -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- 地图区域 -->
+      <div class="lg:col-span-2 bg-white rounded-xl p-6 card-shadow">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-gray-600 font-medium">实时骑行地图</h3>
+          <div class="flex space-x-2">
+            <button class="px-3 py-1 bg-primary/10 text-primary rounded-lg text-sm">
+              <i class="fa fa-location-arrow mr-1"></i> 定位
+            </button>
+            <button class="px-3 py-1 bg-gray-light text-gray-600 rounded-lg text-sm">
+              <i class="fa fa-refresh mr-1"></i> 刷新
+            </button>
+          </div>
+        </div>
+        <div id="map-container" class="w-full h-[400px] rounded-lg overflow-hidden border border-gray-200">
+          <!-- 高德地图将在这里加载 -->
+        </div>
+        <div class="mt-4 grid grid-cols-3 gap-4">
+          <div class="text-center">
+            <p class="text-sm text-gray-500">当前位置</p>
+            <p class="font-medium text-dark">深圳市南山区</p>
+          </div>
+          <div class="text-center">
+            <p class="text-sm text-gray-500">骑行距离</p>
+            <p class="font-medium text-dark">18.5 公里</p>
+          </div>
+          <div class="text-center">
+            <p class="text-sm text-gray-500">预计到达时间</p>
+            <p class="font-medium text-dark">15:30</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 历史骑行 -->
+      <div class="bg-white rounded-xl p-6 card-shadow">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-gray-600 font-medium">历史骑行记录</h3>
+          <button class="text-primary text-sm" onclick="alert('无更多内容')">查看全部</button>
+        </div>
+        <div class="space-y-4">
+          <div class="border-l-4 border-primary pl-4 py-2 card-hover">
+            <div class="flex items-center justify-between">
+              <h4 class="font-medium">深圳湾公园路线</h4>
+              <span class="text-xs text-gray-500">今天</span>
+            </div>
+            <div class="flex items-center justify-between mt-2">
+              <div>
+                <p class="text-sm text-gray-500">距离</p>
+                <p class="font-bold">8.5 公里</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">时间</p>
+                <p class="font-bold">23 分钟</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">平均速度</p>
+                <p class="font-bold">21.3 km/h</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="border-l-4 border-secondary pl-4 py-2 card-hover">
+            <div class="flex items-center justify-between">
+              <h4 class="font-medium">环科兴科技园路线</h4>
+              <span class="text-xs text-gray-500">昨天</span>
+            </div>
+            <div class="flex items-center justify-between mt-2">
+              <div>
+                <p class="text-sm text-gray-500">距离</p>
+                <p class="font-bold">6.2 公里</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">时间</p>
+                <p class="font-bold">18 分钟</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">平均速度</p>
+                <p class="font-bold">20.5 km/h</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="border-l-4 border-warning pl-4 py-2 card-hover">
+            <div class="flex items-center justify-between">
+              <h4 class="font-medium">人才公园路线</h4>
+              <span class="text-xs text-gray-500">7月11日</span>
+            </div>
+            <div class="flex items-center justify-between mt-2">
+              <div>
+                <p class="text-sm text-gray-500">距离</p>
+                <p class="font-bold">12.8 公里</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">时间</p>
+                <p class="font-bold">36 分钟</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">平均速度</p>
+                <p class="font-bold">20.9 km/h</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="border-l-4 border-gray-medium pl-4 py-2 card-hover">
+            <div class="flex items-center justify-between">
+              <h4 class="font-medium">塘朗山路线</h4>
+              <span class="text-xs text-gray-500">7月10日</span>
+            </div>
+            <div class="flex items-center justify-between mt-2">
+              <div>
+                <p class="text-sm text-gray-500">距离</p>
+                <p class="font-bold">20.3 公里</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">时间</p>
+                <p class="font-bold">63 分钟</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">平均速度</p>
+                <p class="font-bold">19.4 km/h</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="bg-dark text-white py-8">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <h3 class="text-xl font-bold mb-4">智能头盔物联网平台</h3>
+          <p class="text-gray-400 text-sm">提供实时骑行数据监测、安全告警和健康分析，让骑行更智能、更安全。</p>
+        </div>
+        <div>
+          <h4 class="font-bold mb-4">快速链接</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="#" class="hover:text-white transition-colors">关于我们</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">使用指南</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">联系我们</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">隐私政策</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-bold mb-4">联系我们</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li class="flex items-center"><i class="fa fa-map-marker mr-2"></i> 深圳市南山区</li>
+            <li class="flex items-center"><i class="fa fa-phone mr-2"></i> 400-123-4567</li>
+            <li class="flex items-center"><i class="fa fa-envelope mr-2"></i> contact@smarthelmet.com</li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-bold mb-4">关注我们</h4>
+          <div class="flex space-x-4">
+            <a href="https://wx.qq.com/" target="_blank" class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-primary transition-colors">
+              <i class="fab fa-weixin"></i>
+            </a>
+            <a href="https://weibo.com/newlogin?tabtype=weibo&gid=102803&openLoginLayer=0&url=https%3A%2F%2Fweibo.com%2F" target="_blank" class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-primary transition-colors">
+              <i class="fab fa-weibo"></i>
+            </a>
+            <a href="https://www.douyin.com/" target="_blank" class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-primary transition-colors">
+              <i class="fab fa-tiktok"></i>
+            </a>
+            <a href="https://apps.microsoft.com/detail/9nblggh5l9xt?launch=true&mode=full&hl=zh-cn&gl=cn&ocid=bingwebsearch" target="_blank" class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-primary transition-colors">
+              <i class="fab fa-instagram"></i>
+            </a>
+
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400 text-sm">
+        <p>&copy; 2025 智能头盔物联网平台 版权所有</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // 设置当前日期
+    document.addEventListener('DOMContentLoaded', function() {
+      const now = new Date();
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById('current-date').textContent = now.toLocaleDateString('zh-CN', options);
+      
+      // 初始化图表
+      initCharts();
+      
+      // 初始化高德地图
+      initMap();
+    });
+    
+    // 图表初始化
+    function initCharts() {
+      // 今日骑行图表
+      new Chart(document.getElementById('today-ride-chart'), {
+        type: 'line',
+        data: {
+          labels: ['0', '5', '10', '15', '20'],
+          datasets: [{
+            data: [0, 5.2, 10.8, 15.3, 18.5],
+            borderColor: '#165DFF',
+            backgroundColor: 'rgba(22, 93, 255, 0.1)',
+            fill: true,
+            tension: 0.4,
+            pointRadius: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { display: false },
+            y: { display: false }
+          }
+        }
+      });
+      
+      // 平均速度图表
+      new Chart(document.getElementById('speed-chart'), {
+        type: 'line',
+        data: {
+          labels: ['0', '5', '10', '15', '20'],
+          datasets: [{
+            data: [0, 18, 21, 24, 22.8],
+            borderColor: '#0FC6C2',
+            backgroundColor: 'rgba(15, 198, 194, 0.1)',
+            fill: true,
+            tension: 0.4,
+            pointRadius: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { display: false },
+            y: { display: false }
+          }
+        }
+      });
+      
+      // 骑行时间图表
+      new Chart(document.getElementById('time-chart'), {
+        type: 'line',
+        data: {
+          labels: ['0', '30', '60', '90'],
+          datasets: [{
+            data: [0, 30, 60, 90],
+            borderColor: '#FF7D00',
+            backgroundColor: 'rgba(255, 125, 0, 0.1)',
+            fill: true,
+            tension: 0.4,
+            pointRadius: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { display: false },
+            y: { display: false }
+          }
+        }
+      });
+      
+      // 卡路里图表
+      new Chart(document.getElementById('calories-chart'), {
+        type: 'line',
+        data: {
+          labels: ['0', '200', '400', '600'],
+          datasets: [{
+            data: [0, 200, 450, 682],
+            borderColor: '#F53F3F',
+            backgroundColor: 'rgba(245, 63, 63, 0.1)',
+            fill: true,
+            tension: 0.4,
+            pointRadius: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { display: false },
+            y: { display: false }
+          }
+        }
+      });
+      
+     
+      // 电池图表
+      new Chart(document.getElementById('battery-chart'), {
+        type: 'doughnut',
+        data: {
+          datasets: [{
+            data: [85, 15],
+            backgroundColor: ['#00B42A', '#F2F3F5'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '75%',
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+    
+    // 初始化高德地图
+    // 初始化高德地图
+function initMap() {
+  // 确保高德地图API已加载
+  if (typeof AMap === 'undefined') {
+    console.error('高德地图API未加载，请检查您的API Key是否正确');
+    document.getElementById('map-container').innerHTML = '<div class="w-full h-full flex items-center justify-center text-red-500">地图加载失败，请检查API Key</div>';
+    return;
+  }
+
+  // 深圳市南山区中心坐标（腾讯大厦附近）
+  const nanshanCoords = [113.93405, 22.53387];
+
+  // 创建地图实例
+  const map = new AMap.Map('map-container', {
+    zoom: 14,
+    center: nanshanCoords,
+    resizeEnable: true
+  });
+
+  // 地图加载完成事件
+  map.on('complete', function() {
+    console.log('地图加载完成，当前中心坐标:', map.getCenter());
+    
+    // 添加当前位置标记
+    const marker = new AMap.Marker({
+      position: nanshanCoords,
+      icon: new AMap.Icon({
+        image: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
+        size: new AMap.Size(25, 34),
+        imageOffset: new AMap.Pixel(0, 0)
+      }),
+      offset: new AMap.Pixel(-13, -30)
+    });
+    marker.setMap(map);
+    
+    // 添加信息窗口
+    const infoWindow = new AMap.InfoWindow({
+      content: '<div style="padding:5px;">当前位置：深圳市南山区<br>骑行距离：18.5公里</div>',
+      offset: new AMap.Pixel(0, -30)
+    });
+    marker.on('click', function() {
+      infoWindow.open(map, marker.getPosition());
+    });
+    
+    // 模拟南山骑行路线
+    const path = [
+      [113.92505, 22.53287],  // 科技园
+      [113.93405, 22.53387],  // 腾讯大厦
+      [113.94305, 22.53287],  // 深圳湾体育中心
+      [113.94805, 22.52587],  // 深圳湾公园
+      [113.94005, 22.51887]   // 蛇口
+    ];
+    
+    // 添加骑行路线
+    const polyline = new AMap.Polyline({
+      path: path,
+      strokeColor: '#165DFF',
+      strokeWeight: 6,
+      strokeOpacity: 1,
+      lineJoin: 'round',
+      lineCap: 'round',
+      zIndex: 50
+    });
+    polyline.setMap(map);
+    
+    // 自适应显示路线
+    map.setFitView([polyline]);
+  });
+
+  // 地图加载错误处理
+  map.on('error', function(e) {
+    console.error('地图加载错误:', e);
+    document.getElementById('map-container').innerHTML = '<div class="w-full h-full flex items-center justify-center text-red-500">地图初始化失败，请检查控制台错误信息</div>';
+  });
+}
+  </script>
+</body>
+</html>    
