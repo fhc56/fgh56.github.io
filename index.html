@@ -72,7 +72,7 @@
     
     <!-- 右侧：火山引擎支持 + Logo -->
     <div class="flex items-center space-x-3">
-      <h3><span class="text-gray-600 text-sm md:text-base">火山引擎支持</span> <!-- 响应式文字大小 --></h3>
+      <h3><span class="text-gray-600 text-sm md:text-base">火山引擎</span> <!-- 响应式文字大小 --></h3>
       <img 
         src="https://ts1.tc.mm.bing.net/th/id/R-C.cddc9706e4d1fed4799f067ed9b14a6e?rik=T5HBzetvHEsQ0w&riu=http%3a%2f%2fn.sinaimg.cn%2fsinakd20230418s%2f715%2fw758h757%2f20230418%2f3b95-21f6738482c51496364487db9570c407.jpg&ehk=BdxXWmq74srjNirLCtobpP82gh%2frYZt76w7E3U1j24o%3d&risl=&pid=ImgRaw&r=0" height="30px" width="30px" 
         alt="火山引擎 Logo" 
@@ -364,12 +364,13 @@
       
       <!-- 历史骑行 -->
       <div class="bg-white rounded-xl p-6 card-shadow">
+        
         <div class="flex items-center justify-between mb-6">
           <h3 class="text-gray-600 font-medium">历史骑行记录</h3>
           <button class="text-primary text-sm" onclick="alert('无更多内容')">查看全部</button>
         </div>
         <div class="space-y-4">
-          <div class="border-l-4 border-primary pl-4 py-2 card-hover">
+          <div class="border-l-4 border-primary pl-4 py-2 card-hover rounded-md">
             <div class="flex items-center justify-between">
               <h4 class="font-medium">深圳湾公园路线</h4>
               <span class="text-xs text-gray-500">今天</span>
@@ -390,7 +391,7 @@
             </div>
           </div>
           
-          <div class="border-l-4 border-secondary pl-4 py-2 card-hover">
+          <div class="border-l-4 border-secondary pl-4 py-2 card-hover rounded-md">
             <div class="flex items-center justify-between">
               <h4 class="font-medium">环科兴科技园路线</h4>
               <span class="text-xs text-gray-500">昨天</span>
@@ -411,7 +412,7 @@
             </div>
           </div>
           
-          <div class="border-l-4 border-warning pl-4 py-2 card-hover">
+          <div class="border-l-4 border-warning pl-4 py-2 card-hover rounded-md">
             <div class="flex items-center justify-between">
               <h4 class="font-medium">人才公园路线</h4>
               <span class="text-xs text-gray-500">7月11日</span>
@@ -432,7 +433,7 @@
             </div>
           </div>
           
-          <div class="border-l-4 border-gray-medium pl-4 py-2 card-hover">
+          <div class="border-l-4 border-gray-medium pl-4 py-2 card-hover rounded-md">
             <div class="flex items-center justify-between">
               <h4 class="font-medium">塘朗山路线</h4>
               <span class="text-xs text-gray-500">7月10日</span>
@@ -455,7 +456,162 @@
         </div>
       </div>
     </div>
+
+
+
+
+
+    
+
+       <!-- 雷达数据分析卡片 -->
+        <div class="bg-white rounded-xl card-shadow p-6 mb-6 mt-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-dark">雷达数据分析</h2>
+                
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- 简化雷达图展示（只显示0°、90°、180°、270°） -->
+                <div class="lg:col-span-2">
+                    <div class="bg-light-1 rounded-lg p-12 h-[420px] border border-gray-200 card-hover">
+                        <h3 class="font-medium text-dark mb-3">关键方向危险系数</h3>
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- 数据统计信息 -->
+                <div class="space-y-4">
+                    <!-- 危险区域分布 -->
+                    <div class="bg-light-1 rounded-lg p-4 h-[250px] border border-gray-200 card-hover">
+                        <h3 class="font-medium text-dark mb-3">危险区域分布</h3>
+                        <canvas id="dangerDistributionChart"></canvas>
+                    </div>
+                    
+                    <!-- 关键指标 -->
+                    <div class="bg-light-1 rounded-lg p-4 border border-gray-200 card-hover"> 
+                        <h3 class="font-medium text-dark mb-3">关键指标</h3>
+                        <div class="space-y-3">
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-dark-2">平均危险系数</span>
+                                    <span class="text-sm font-medium">68.4</span>
+                                </div>
+                                <div class="w-full bg-light-2 rounded-full h-2">
+                                    <div class="bg-warning h-2 rounded-full" style="width: 68%"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-dark-2">危险事件总数</span>
+                                    <span class="text-sm font-medium">1,286</span>
+                                </div>
+                                <div class="w-full bg-light-2 rounded-full h-2">
+                                    <div class="bg-danger h-2 rounded-full" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-dark-2">系统可靠性</span>
+                                    <span class="text-sm font-medium">99.8%</span>
+                                </div>
+                                <div class="w-full bg-light-2 rounded-full h-2">
+                                    <div class="bg-success h-2 rounded-full" style="width: 99.8%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 详细数据表格 -->
+            <div class="mt-8">
+                <h3 class="font-medium text-dark mb-4">危险区域详细数据</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white">
+                        <thead>
+                            <tr class="bg-light-1 text-dark-2 text-sm leading-normal">
+                                <th class="py-3 px-4 text-left">区域位置</th>
+                                <th class="py-3 px-4 text-left">危险等级</th>
+                                <th class="py-3 px-4 text-left">事件数量</th>
+                                <th class="py-3 px-4 text-left">平均距离</th>
+                                <th class="py-3 px-4 text-left">趋势</th>
+                                <th class="py-3 px-4 text-left">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-dark-2 text-sm">
+                            <tr class="border-b border-light-2 hover:bg-light-1/50 transition-colors">
+                                <td class="py-3 px-4">东北方向 45°</td>
+                                <td class="py-3 px-4"><span class="bg-danger/10 text-danger px-2 py-1 rounded-full text-xs">高</span></td>
+                                <td class="py-3 px-4">218</td>
+                                <td class="py-3 px-4">12.5m</td>
+                                <td class="py-3 px-4"><span class="text-danger"><i class="fa fa-arrow-up"></i> 上升</span></td>
+                                <td class="py-3 px-4"><button class="text-primary hover:text-primary/80" onclick="alert('暂无更多内容')">查看详情</button></td>
+                            </tr>
+                            <tr class="border-b border-light-2 hover:bg-light-1/50 transition-colors">
+                                <td class="py-3 px-4">西北方向 315°</td>
+                                <td class="py-3 px-4"><span class="bg-warning/10 text-warning px-2 py-1 rounded-full text-xs">中</span></td>
+                                <td class="py-3 px-4">185</td>
+                                <td class="py-3 px-4">18.3m</td>
+                                <td class="py-3 px-4"><span class="text-success"><i class="fa fa-arrow-down"></i> 下降</span></td>
+                                <td class="py-3 px-4"><button class="text-primary hover:text-primary/80" onclick="alert('暂无更多内容')">查看详情</button></td>
+                            </tr>
+                            <tr class="border-b border-light-2 hover:bg-light-1/50 transition-colors">
+                                <td class="py-3 px-4">东南方向 135°</td>
+                                <td class="py-3 px-4"><span class="bg-warning/10 text-warning px-2 py-1 rounded-full text-xs">中</span></td>
+                                <td class="py-3 px-4">156</td>
+                                <td class="py-3 px-4">15.7m</td>
+                                <td class="py-3 px-4"><span class="text-danger"><i class="fa fa-arrow-up"></i> 上升</span></td>
+                                <td class="py-3 px-4"><button class="text-primary hover:text-primary/80" onclick="alert('暂无更多内容')">查看详情</button></td>
+                            </tr>
+                            <tr class="border-b border-light-2 hover:bg-light-1/50 transition-colors">
+                                <td class="py-3 px-4">西南方向 225°</td>
+                                <td class="py-3 px-4"><span class="bg-success/10 text-success px-2 py-1 rounded-full text-xs">低</span></td>
+                                <td class="py-3 px-4">92</td>
+                                <td class="py-3 px-4">22.1m</td>
+                                <td class="py-3 px-4"><span class="text-success"><i class="fa fa-arrow-down"></i> 下降</span></td>
+                                <td class="py-3 px-4"><button class="text-primary hover:text-primary/80" onclick="alert('暂无更多内容')">查看详情</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="flex justify-between items-center mt-4">
+                    <p class="text-xs text-dark-2">已显示全部记录</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+
+
+
+
+
   </main>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   <!-- 页脚 -->
   <footer class="bg-dark text-white py-8">
@@ -491,7 +647,7 @@
             <a href="https://weibo.com/newlogin?tabtype=weibo&gid=102803&openLoginLayer=0&url=https%3A%2F%2Fweibo.com%2F" target="_blank" class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-primary transition-colors">
               <i class="fab fa-weibo"></i>
             </a>
-            <a href="https://www.douyin.com/" target="_blank" class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-primary transition-colors">
+            <a href="https://www.douyin.com/user/MS4wLjABAAAAT5zLrIOcRghyFlzgqYqs4cbuIdv8imoFwYOuVJnJsyZC7JaowF_elvjxicqob3_Z?from_tab_name=main" target="_blank" class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-primary transition-colors">
               <i class="fab fa-tiktok"></i>
             </a>
             <a href="https://apps.microsoft.com/detail/9nblggh5l9xt?launch=true&mode=full&hl=zh-cn&gl=cn&ocid=bingwebsearch" target="_blank" class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-primary transition-colors">
@@ -506,6 +662,12 @@
       </div>
     </div>
   </footer>
+
+
+
+
+
+
 
   <!-- JavaScript -->
   <script>
@@ -720,6 +882,142 @@ function initMap() {
     document.getElementById('map-container').innerHTML = '<div class="w-full h-full flex items-center justify-center text-red-500">地图初始化失败，请检查控制台错误信息</div>';
   });
 }
+
+
+
+    document.addEventListener("DOMContentLoaded", () => {
+  // 模拟数据
+  function generateRadarData() {
+    return Array.from({ length: 360 }, () => Math.floor(Math.random() * 100));
+  }
+
+  
+
+
+
+
+
+
+
+  
+  const LABELS = ['0°', '45°', '90°', '135°', '180°', '225°', '270°', '315°'];
+
+new Chart(document.getElementById('radarChart'), {
+  type: 'radar',
+  data: {
+    labels: LABELS,
+    datasets: [{
+      data: [60, 40, 70, 50, 80, 30, 90, 20], // 模拟数据
+      backgroundColor: 'rgba(37, 99, 235, 0.2)',
+      borderColor: 'rgba(37, 99, 235, 1)',
+      pointRadius: 3,
+      borderWidth: 2
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      r: {
+        min: 0,
+        max: 100,
+        angleLines: { color: 'rgba(0,0,0,0.1)' },
+        ticks: { display: false } // 隐藏刻度
+      }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: { enabled: false }
+    }
+  }
+});
+
+
+
+
+
+  // 初始化危险区域分布饼图
+  const dangerCtx = document.getElementById('dangerDistributionChart').getContext('2d');
+  const dangerChart = new Chart(dangerCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['高风险', '中风险', '低风险', '安全区域'],
+      datasets: [{
+        data: [20, 30, 40, 10],
+        backgroundColor: [
+          'rgba(255, 77, 79, 0.8)',
+          'rgba(255, 125, 0, 0.8)',
+          'rgba(82, 196, 26, 0.8)',
+          'rgba(22, 93, 255, 0.8)',
+        ],
+        borderColor: [
+          'rgba(255, 77, 79, 1)',
+          'rgba(255, 125, 0, 1)',
+          'rgba(82, 196, 26, 1)',
+          'rgba(22, 93, 255, 1)',
+        ],
+        borderWidth: 1,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false, // 关键：关闭自动宽高比
+      cutout: '70%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { boxWidth: 12, padding: 15 },
+        },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => `${ctx.label}：${ctx.raw} 个`,
+          },
+        },
+      },
+      // 强制限制 Canvas 尺寸（可选）
+      onResize: (chart) => {
+        const container = chart.canvas.parentNode;
+        chart.canvas.width = container.clientWidth;
+        chart.canvas.height = container.clientHeight;
+      }
+    }
+  });
+
+  // 时间筛选器交互（模拟）
+  document.getElementById('timeFilter').addEventListener('change', (e) => {
+    const newRadarData = generateRadarData();
+    radarChart.data.datasets[0].data = newRadarData;
+    radarChart.data.labels = newRadarData.map((_, i) => `${i}°`);
+    radarChart.update();
+
+    // 模拟更新饼图数据（实际需根据业务逻辑处理）
+    dangerChart.data.datasets[0].data = [15, 25, 35, 25];
+    dangerChart.update();
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
   </script>
 </body>
 </html>    
