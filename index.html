@@ -77,8 +77,7 @@
       <img 
         src="https://ts1.tc.mm.bing.net/th/id/R-C.cddc9706e4d1fed4799f067ed9b14a6e?rik=T5HBzetvHEsQ0w&riu=http%3a%2f%2fn.sinaimg.cn%2fsinakd20230418s%2f715%2fw758h757%2f20230418%2f3b95-21f6738482c51496364487db9570c407.jpg&ehk=BdxXWmq74srjNirLCtobpP82gh%2frYZt76w7E3U1j24o%3d&risl=&pid=ImgRaw&r=0" height="30px" width="30px" 
         alt="火山引擎 Logo" 
-        class="h-7 w-auto" 
-      >
+        class="h-7 w-auto" >
     </div>
     
     <!-- 移动端菜单按钮 -->
@@ -90,18 +89,18 @@
 
   <!-- 主内容区 -->
   <main class="container mx-auto px-4 pt-24 pb-12">
-    <!-- 欢迎信息 -->
-    <div class="mb-8 flex items-center justify-between"> <!-- 关键：flex 布局 -->
-  <div>
-    <h2 class="text-[clamp(2.5rem,3vw,3.0rem)] font-bold text-dark">欢迎回来，<span class="text-primary">骑行者</span></h2>
-    <p class="text-gray-600">今天是 <span id="current-date">2025年7月13日</span>，上次骑行：昨天 18:30</p>
-  </div>
-  
-  <!-- 右侧按钮 -->
-  <button class="px-5 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition" onclick="alert('骑行开始')">
-    <h2>开始骑行</h2>
-  </button>
-</div>
+        <!-- 欢迎信息 -->
+        <div class="mb-8 flex items-center justify-between"> <!-- 关键：flex 布局 -->
+      <div>
+        <h2 class="text-[clamp(2.5rem,3vw,3.0rem)] font-bold text-dark">欢迎回来，<span class="text-primary">骑行者</span></h2>
+        <p class="text-gray-600">今天是 <span id="current-date">2025年7月13日</span>，上次骑行：昨天 18:30</p>
+      </div>
+      
+      <!-- 右侧按钮 -->
+          <button class="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700 transition" onclick="alert('骑行开始')">
+            <h2>开始骑行</h2>
+          </button>
+        </div>
     
     <!-- 数据概览卡片 -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -468,13 +467,21 @@
         <div class="bg-white rounded-xl card-shadow p-6 mb-6 mt-8">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-xl font-bold text-dark">雷达数据分析</h2>
-                
+                <!-- 新增方向标 + 北 结构 -->
+                <!-- 方向标：用 Font Awesome 6 的正确类名 -->
+                <div class="top-4 right-6 flex flex-col items-center">
+                  <i class="fa-solid fa-compass text-blue-500 text-xl"></i> <!-- 关键：fa-solid 前缀 + 正确类名 -->
+                  <span class="text-xs text-dark mt-1">北</span>
+                </div>
+
+
+
             </div>
             
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- 简化雷达图展示（只显示0°、90°、180°、270°） -->
                 <div class="lg:col-span-2">
-                    <div class="bg-light-1 rounded-lg p-12 h-[420px] border border-gray-200 card-hover">
+                    <div class="bg-light-1 rounded-lg p-12 h-[490px] border border-gray-200 card-hover">
                         <h3 class="font-medium text-dark mb-3">关键方向危险系数</h3>
                         <canvas id="radarChart"></canvas>
                     </div>
@@ -495,20 +502,20 @@
                             <div>
                                 <div class="flex justify-between mb-1">
                                     <span class="text-sm text-dark-2">平均危险系数</span>
-                                    <span class="text-sm font-medium">68.4</span>
+                                    <span class="text-sm font-medium">8.4</span>
                                 </div>
                                 <div class="w-full bg-light-2 rounded-full h-2">
-                                    <div class="bg-warning h-2 rounded-full" style="width: 68%"></div>
+                                    <div class="bg-warning h-2 rounded-full" style="width: 8%"></div>
                                 </div>
                             </div>
                             
                             <div>
                                 <div class="flex justify-between mb-1">
                                     <span class="text-sm text-dark-2">危险事件总数</span>
-                                    <span class="text-sm font-medium">1,286</span>
+                                    <span class="text-sm font-medium">12</span>
                                 </div>
                                 <div class="w-full bg-light-2 rounded-full h-2">
-                                    <div class="bg-danger h-2 rounded-full" style="width: 85%"></div>
+                                    <div class="bg-danger h-2 rounded-full" style="width: 12%"></div>
                                 </div>
                             </div>
                             
@@ -545,32 +552,32 @@
                             <tr class="border-b border-light-2 hover:bg-light-1/50 transition-colors">
                                 <td class="py-3 px-4">东北方向 45°</td>
                                 <td class="py-3 px-4"><span class="bg-danger/10 text-danger px-2 py-1 rounded-full text-xs">高</span></td>
-                                <td class="py-3 px-4">218</td>
-                                <td class="py-3 px-4">12.5m</td>
+                                <td class="py-3 px-4">13</td>
+                                <td class="py-3 px-4">12m</td>
                                 <td class="py-3 px-4"><span class="text-danger"><i class="fa fa-arrow-up"></i> 上升</span></td>
                                 <td class="py-3 px-4"><button class="text-primary hover:text-primary/80" onclick="alert('暂无更多内容')">查看详情</button></td>
                             </tr>
                             <tr class="border-b border-light-2 hover:bg-light-1/50 transition-colors">
                                 <td class="py-3 px-4">西北方向 315°</td>
                                 <td class="py-3 px-4"><span class="bg-warning/10 text-warning px-2 py-1 rounded-full text-xs">中</span></td>
-                                <td class="py-3 px-4">185</td>
-                                <td class="py-3 px-4">18.3m</td>
+                                <td class="py-3 px-4">3</td>
+                                <td class="py-3 px-4">11.3m</td>
                                 <td class="py-3 px-4"><span class="text-success"><i class="fa fa-arrow-down"></i> 下降</span></td>
                                 <td class="py-3 px-4"><button class="text-primary hover:text-primary/80" onclick="alert('暂无更多内容')">查看详情</button></td>
                             </tr>
                             <tr class="border-b border-light-2 hover:bg-light-1/50 transition-colors">
                                 <td class="py-3 px-4">东南方向 135°</td>
                                 <td class="py-3 px-4"><span class="bg-warning/10 text-warning px-2 py-1 rounded-full text-xs">中</span></td>
-                                <td class="py-3 px-4">156</td>
-                                <td class="py-3 px-4">15.7m</td>
+                                <td class="py-3 px-4">4</td>
+                                <td class="py-3 px-4">11.7m</td>
                                 <td class="py-3 px-4"><span class="text-danger"><i class="fa fa-arrow-up"></i> 上升</span></td>
                                 <td class="py-3 px-4"><button class="text-primary hover:text-primary/80" onclick="alert('暂无更多内容')">查看详情</button></td>
                             </tr>
                             <tr class="border-b border-light-2 hover:bg-light-1/50 transition-colors">
                                 <td class="py-3 px-4">西南方向 225°</td>
                                 <td class="py-3 px-4"><span class="bg-success/10 text-success px-2 py-1 rounded-full text-xs">低</span></td>
-                                <td class="py-3 px-4">92</td>
-                                <td class="py-3 px-4">22.1m</td>
+                                <td class="py-3 px-4">1</td>
+                                <td class="py-3 px-4">10.1m</td>
                                 <td class="py-3 px-4"><span class="text-success"><i class="fa fa-arrow-down"></i> 下降</span></td>
                                 <td class="py-3 px-4"><button class="text-primary hover:text-primary/80" onclick="alert('暂无更多内容')">查看详情</button></td>
                             </tr>
@@ -582,7 +589,77 @@
                 </div>
             </div>
         </div>
-    </main>
+    
+    
+
+
+
+          <div class="bg-white rounded-xl card-shadow p-6 mb-6 mt-8">
+  <!-- 标题单独一行 -->
+   <div class="flex items-center"> 
+  <h2 class="text-xl font-bold text-dark">实时音视频交互 &nbsp;</h2>
+  <img 
+        src="https://ts1.tc.mm.bing.net/th/id/R-C.cddc9706e4d1fed4799f067ed9b14a6e?rik=T5HBzetvHEsQ0w&riu=http%3a%2f%2fn.sinaimg.cn%2fsinakd20230418s%2f715%2fw758h757%2f20230418%2f3b95-21f6738482c51496364487db9570c407.jpg&ehk=BdxXWmq74srjNirLCtobpP82gh%2frYZt76w7E3U1j24o%3d&risl=&pid=ImgRaw&r=0" height="30px" width="30px" 
+        alt="火山引擎 Logo" 
+        class="h-7 w-auto" ></div>
+  <!-- 按钮父容器，水平居中 -->
+  <div class="flex justify-center"> 
+    <button class="px-8 py-4 border border-gray-300 rounded-md text-gray-700 
+              hover:bg-blue-600 hover:text-white hover:border-transparent 
+              transition card-hover">
+      <a href="file:///D:/C++/vs%20Code/%E5%AE%9E%E6%97%B6%E9%9F%B3%E8%A7%86%E9%A2%91.html" target="_blank"><h2 class="font-bold">发起实时语音视频通话</h3></a>
+    </button>
+  </div>
+</div>
+
+
+
+                  <!-- 语音抓拍画面 -->
+      <div class="bg-white rounded-xl card-shadow p-6 mb-6 mt-8">
+    <!-- 标题 + 同行元素容器（复用 flex items-center 让标题和可能的元素同行居中） -->
+    <div class="flex items-center">
+        <h2 class="text-xl font-bold text-dark">语音抓拍画面</h2>
+        <!-- 如果这里需要类似“火山引擎 Logo”的小图标，就保留 img，否则可删除 -->
+        <!-- <img src="..." alt="..." class="h-7 w-auto ml-2"> -->
+    </div>
+    <!-- 图片/内容居中容器（复用 flex justify-center 让内容水平居中） -->
+    <!-- 图片/内容居中容器 -->
+<div class="flex justify-center mt-4 gap-12">
+    <img 
+        src="语音抓拍画面1.png" 
+        alt="语音抓拍画面1" 
+        class="max-w-full h-auto rounded-xl card-hover cursor-pointer" 
+        width="400px" 
+        height="300px"
+        onclick="openLargeImage(this.src)"
+    >
+    <img 
+        src="语音抓拍画面2.png" 
+        alt="语音抓拍画面2" 
+        class="max-w-full h-auto rounded-xl card-hover cursor-pointer" 
+        width="400px" 
+        height="300px"
+        onclick="openLargeImage(this.src)"
+    >
+    <img 
+        src="语音抓拍画面3.png" 
+        alt="语音抓拍画面3" 
+        class="max-w-full h-auto rounded-xl card-hover cursor-pointer" 
+        width="400px" 
+        height="300px"
+        onclick="openLargeImage(this.src)"
+    >
+</div>
+
+<!-- 动态弹窗容器（增强关闭逻辑） -->
+<div id="largeImageModal" class="fixed top-0 left-0 w-full h-full bg-black/80 flex justify-center items-center hidden">
+    <!-- 关闭按钮 -->
+    <span class="text-white text-3xl absolute top-4 right-6 cursor-pointer" onclick="closeLargeImage()">×</span>
+    <!-- 大图显示 -->
+    <img id="largeImage" src="" alt="Large Image" class="max-w-full max-h-full">
+    <!-- 新增：背景点击关闭（覆盖整个弹窗） -->
+    <div class="absolute inset-0" onclick="closeLargeImage()"></div>
+</div>
 
 
 
@@ -590,6 +667,8 @@
 
 
 
+    
+      </main>
   </main>
   
 
@@ -625,9 +704,9 @@
         <div>
           <h4 class="font-bold mb-4">快速链接</h4>
           <ul class="space-y-2 text-gray-400">
-            <li><a href="#" class="hover:text-white transition-colors">关于我们</a></li>
+            <li><a href="https://www.volcengine.com/content" target="_blank" class="hover:text-white transition-colors">关于我们</a></li>
             <li><a href="#" class="hover:text-white transition-colors">使用指南</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">联系我们</a></li>
+            <li><a href="https://www.volcengine.com/product/doubao?utm_source=5&utm_medium=sem_bing&utm_term=sem_bing_pinpai_damoxing&utm_campaign=pinpai_2883&utm_content=doubao&msclkid=6bfaa903c1ab125fe46ec1812cb31558" target="_blank" class="hover:text-white transition-colors">联系我们</a></li>
             <li><a href="#" class="hover:text-white transition-colors">隐私政策</a></li>
           </ul>
         </div>
@@ -669,7 +748,7 @@
 
 
 
- <canvas id="radarChart" width="400" height="400"></canvas>
+    <canvas id="radarChart" width="400" height="400"></canvas>
   <!-- JavaScript -->
   <script>
     // 设置当前日期
@@ -832,20 +911,36 @@ function initMap() {
     console.log('地图加载完成，当前中心坐标:', map.getCenter());
     
     // 添加当前位置标记
-    const marker = new AMap.Marker({
-      position: nanshanCoords,
-      icon: new AMap.Icon({
-        image: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
-        size: new AMap.Size(25, 34),
-        imageOffset: new AMap.Pixel(0, 0)
-      }),
-      offset: new AMap.Pixel(-13, -30)
-    });
-    marker.setMap(map);
-    
+
+// https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png
+
+    // const marker = new AMap.Marker({
+    //   position: nanshanCoords,
+    //   icon: new AMap.Icon({
+    //     image: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
+    //     size: new AMap.Size(25, 34),
+    //     imageOffset: new AMap.Pixel(0, 0)
+    //   }),
+    //   offset: new AMap.Pixel(-13, -30)
+    // });
+    // marker.setMap(map);
+    // 无需自定义 Icon，直接用内置样式
+      const marker = new AMap.Marker({
+          position: nanshanCoords,
+          // 高德内置红色标记样式
+          icon: 'https://a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-red.png', 
+          // 适配内置图标的偏移，让显示更标准
+          offset: new AMap.Pixel(-12, -30) 
+      });
+      marker.setMap(map);
+
+
+
+
+
     // 添加信息窗口
     const infoWindow = new AMap.InfoWindow({
-      content: '<div style="padding:5px;">当前位置：深圳市南山区<br>骑行距离：18.5公里</div>',
+      content: '<div style="padding:5px;">当前位置：深圳市南山区<br>(113.93405, 22.53387)<br>骑行距离：18.5公里</div>',
       offset: new AMap.Pixel(0, -30)
     });
     marker.on('click', function() {
@@ -855,7 +950,7 @@ function initMap() {
     // 模拟南山骑行路线
     const path = [
       [113.92505, 22.53287],  // 科技园
-      [113.93405, 22.53387],  // 腾讯大厦
+      [113.93405, 22.53387],  // 腾讯大厦   
       [113.94305, 22.53287],  // 深圳湾体育中心
       [113.94805, 22.52587],  // 深圳湾公园
       [113.94005, 22.51887]   // 蛇口
@@ -901,106 +996,136 @@ function initMap() {
 
 
   
-  const LABELS = ['0°', '45°', '90°', '135°', '180°', '225°', '270°', '315°'];
+      const LABELS = ['0°', '45°', '90°', '135°', '180°', '225°', '270°', '315°'];
 
-new Chart(document.getElementById('radarChart'), {
-  type: 'radar',
-  data: {
-    labels: LABELS,
-    datasets: [{
-      data: [60, 40, 70, 50, 80, 30, 90, 20], // 模拟数据
-      backgroundColor: 'rgba(37, 99, 235, 0.2)',
-      borderColor: 'rgba(37, 99, 235, 1)',
-      pointRadius: 3,
-      borderWidth: 2
-    }]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      r: {
-        min: 0,
-        max: 100,
-        angleLines: { color: 'rgba(0,0,0,0.1)' },
-        ticks: { display: false } // 隐藏刻度
-      }
-    },
-    plugins: {
-      legend: { display: false },
-      tooltip: { enabled: false }
-    }
-  }
-});
-
-
-
-
-
-  // 初始化危险区域分布饼图
-  const dangerCtx = document.getElementById('dangerDistributionChart').getContext('2d');
-  const dangerChart = new Chart(dangerCtx, {
-    type: 'doughnut',
-    data: {
-      labels: ['高风险', '中风险', '低风险', '安全区域'],
-      datasets: [{
-        data: [20, 30, 40, 10],
-        backgroundColor: [
-          'rgba(255, 77, 79, 0.8)',
-          'rgba(255, 125, 0, 0.8)',
-          'rgba(82, 196, 26, 0.8)',
-          'rgba(22, 93, 255, 0.8)',
-        ],
-        borderColor: [
-          'rgba(255, 77, 79, 1)',
-          'rgba(255, 125, 0, 1)',
-          'rgba(82, 196, 26, 1)',
-          'rgba(22, 93, 255, 1)',
-        ],
-        borderWidth: 1,
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false, // 关键：关闭自动宽高比
-      cutout: '70%',
-      plugins: {
-        legend: {
-          position: 'bottom',
-          labels: { boxWidth: 12, padding: 15 },
-        },
-        tooltip: {
-          callbacks: {
-            label: (ctx) => `${ctx.label}：${ctx.raw} 个`,
-          },
-        },
+    new Chart(document.getElementById('radarChart'), {
+      type: 'radar',
+      data: {
+        labels: LABELS,
+        datasets: [{
+          data: [24, 25, 24, 15, 23, 15, 85, 11], // 模拟数据
+          backgroundColor: 'rgba(37, 99, 235, 0.2)',
+          borderColor: 'rgba(37, 99, 235, 1)',
+          pointRadius: 3,
+          borderWidth: 2
+        }]
       },
-      // 强制限制 Canvas 尺寸（可选）
-      onResize: (chart) => {
-        const container = chart.canvas.parentNode;
-        chart.canvas.width = container.clientWidth;
-        chart.canvas.height = container.clientHeight;
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          r: {
+            min: 0,
+            max: 100,
+            angleLines: { color: 'rgba(0,0,0,0.1)' },
+            ticks: { display: false } // 隐藏刻度
+          }
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: false }
+        }
       }
+    });
+
+
+
+
+
+      // 初始化危险区域分布饼图
+      const dangerCtx = document.getElementById('dangerDistributionChart').getContext('2d');
+      const dangerChart = new Chart(dangerCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['高风险', '中风险', '低风险', '安全区域'],
+          datasets: [{
+            data: [2, 5, 10, 83],
+            backgroundColor: [
+              'rgba(255, 77, 79, 0.8)',
+              'rgba(255, 125, 0, 0.8)',
+              'rgba(22, 93, 255, 0.8)',
+              'rgba(82, 196, 26, 0.8)',
+             
+            ],
+            borderColor: [
+               'rgba(255, 77, 79, 0.8)',
+              'rgba(255, 125, 0, 0.8)',
+              'rgba(22, 93, 255, 0.8)',
+              'rgba(82, 196, 26, 0.8)',
+            ],
+            borderWidth: 1,
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false, // 关键：关闭自动宽高比
+          cutout: '70%',
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: { boxWidth: 12, padding: 15 },
+            },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => `${ctx.label}：${ctx.raw} 个`,
+              },
+            },
+          },
+          // 强制限制 Canvas 尺寸（可选）
+          onResize: (chart) => {
+            const container = chart.canvas.parentNode;
+            chart.canvas.width = container.clientWidth;
+            chart.canvas.height = container.clientHeight;
+          }
+        }
+      });
+
+      // 时间筛选器交互（模拟）
+      document.getElementById('timeFilter').addEventListener('change', (e) => {
+        const newRadarData = generateRadarData();
+        radarChart.data.datasets[0].data = newRadarData;
+        radarChart.data.labels = newRadarData.map((_, i) => `${i}°`);
+        radarChart.update();
+
+        // 模拟更新饼图数据（实际需根据业务逻辑处理）
+        dangerChart.data.datasets[0].data = [15, 25, 35, 25];
+        dangerChart.update();
+      });
+    });
+
+
+
+
+
+       // 打开大图弹窗
+function openLargeImage(src) {
+    const modal = document.getElementById('largeImageModal');
+    const img = document.getElementById('largeImage');
+    img.src = src;
+    modal.classList.remove('hidden'); // 显示弹窗
+    
+    // 新增：监听 ESC 键关闭
+    document.addEventListener('keydown', handleEscClose);
+}
+
+// 关闭大图弹窗
+function closeLargeImage() {
+    const modal = document.getElementById('largeImageModal');
+    modal.classList.add('hidden'); // 隐藏弹窗
+    
+    // 移除 ESC 键监听（避免全局干扰）
+    document.removeEventListener('keydown', handleEscClose);
+}
+
+// ESC 键关闭逻辑
+function handleEscClose(event) {
+    if (event.key === 'Escape') {
+        closeLargeImage();
     }
-  });
-
-  // 时间筛选器交互（模拟）
-  document.getElementById('timeFilter').addEventListener('change', (e) => {
-    const newRadarData = generateRadarData();
-    radarChart.data.datasets[0].data = newRadarData;
-    radarChart.data.labels = newRadarData.map((_, i) => `${i}°`);
-    radarChart.update();
-
-    // 模拟更新饼图数据（实际需根据业务逻辑处理）
-    dangerChart.data.datasets[0].data = [15, 25, 35, 25];
-    dangerChart.update();
-  });
-});
+}
 
 
-
-
-
+          
 
 
 
